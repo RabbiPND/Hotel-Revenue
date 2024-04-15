@@ -22,36 +22,6 @@ ON h.meal = c.meal
 /*
 ANALYSIS
 */
-
-SELECT *
-FROM #Hotels
-
-SELECT
-    h.arrival_date_year, 
-    h.hotel,
-    ROUND(SUM((h.stays_in_week_nights + h.stays_in_weekend_nights) * (h.adr - (h.adr * m.Discount))), 2) AS "Total Revenue"
-FROM 
-    #Hotels AS h
-LEFT JOIN 
-    dbo.market_segment AS m ON h.market_segment = m.market_segment
-GROUP BY 
-    h.arrival_date_year, h.hotel
-ORDER BY 
-    h.arrival_date_year;
-
-SELECT ROUND(AVG(adr),2) AS "Average adr"
-FROM #Hotels
-
-SELECT ROUND(AVG(m.Discount),2) AS "Average discount"
-FROM #Hotels AS h
-LEFT JOIN 
-dbo.market_segment AS m ON h.market_segment = m.market_segment
-
-SELECT SUM(stays_in_week_nights + stays_in_weekend_nights) AS "Total nights"
-FROM #Hotels
-
-
-------------------------------------------------------------------------
 --STANDARDIZED DATE
 
 SELECT CONVERT(date, reservation_status_date) AS standardized_reservation_status_date
@@ -66,13 +36,39 @@ SET standardized_reservation_status_date = CONVERT(DATE, reservation_status_date
 
 SELECT reservation_status_date, standardized_reservation_status_date
 FROM #Hotels;
+-------------------------------
 
 
-SELECT h.standardized_reservation_status_date, ROUND(SUM((h.stays_in_week_nights + h.stays_in_weekend_nights) * (h.adr - (h.adr * m.Discount))), 2) AS "Total Revenue"
-FROM #Hotels AS h
+
+SELECT *
+FROM #Hotels
+
+SELECT
+	h.standardized_reservation_status_date,
+    h.arrival_date_year, 
+    h.hotel,
+	h.adr,
+	h.required_car_parking_spaces,
+	h.country,
+	m.Discount,
+    ROUND(SUM((h.stays_in_week_nights + h.stays_in_weekend_nights) * (h.adr - (h.adr * m.Discount))), 2) AS "Total Revenue",
+	SUM(stays_in_week_nights + stays_in_weekend_nights) AS "Total nights"
+FROM 
+    #Hotels AS h
 LEFT JOIN 
-dbo.market_segment AS m ON h.market_segment = m.market_segment
-GROUP BY h.standardized_reservation_status_date
+    dbo.market_segment AS m ON h.market_segment = m.market_segment
+GROUP BY 
+    h.standardized_reservation_status_date,	h.adr, h.required_car_parking_spaces, h.arrival_date_year, h.hotel, h.country, m.Discount 
+ORDER BY 
+    h.standardized_reservation_status_date;
+
+
+------------------------------------------------------------------------
+
+SELECT *
+FROM #Hotels
+ALTER TABLE #Hotels
+DROP COLUMN reservation_status_date
 
 
 
