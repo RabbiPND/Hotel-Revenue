@@ -1,7 +1,7 @@
 # Hotel-Revenue
 Hotel Revenue Analysis
 
-                                                                              The Report
+                                                                              Report
 I will be dealing with a data-driven exploration of the hospitality industry. In the dataset, our goal is to develop a database for analysing and visualizing hotel booking data. I will carefully analyse the hotel dataset to answer three key business questions. Which are:
 1.	Revenue Growth: Examining if our revenue grows annually?
 2.	Parking Lot Size: Evaluating the need for expansion?
